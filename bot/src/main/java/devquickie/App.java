@@ -10,6 +10,7 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -21,10 +22,12 @@ public class App implements EventListener
     private static final String token_path = "bot/assets/token.txt";
 
     private static String token;
+    private static CommandHandler command_handler;
 
     public static void main( String[] args )
     {
         loadToken();
+        command_handler = new CommandHandler();
         try {
             JDA jda = new JDABuilder(AccountType.BOT)
                 .setToken(token)
@@ -56,7 +59,7 @@ public class App implements EventListener
 	@Override
 	public void onEvent(Event event) {
 		if(event instanceof ReadyEvent){
-            System.out.println("hat geklappt");
+            // bot is ready
         }
 
         if(event instanceof MessageReceivedEvent){
@@ -66,6 +69,18 @@ public class App implements EventListener
                     System.out.printf("[PM] %s: %s\n", received.getAuthor().getName(), received.getMessage().getContentDisplay());
                     PrivateChannel channel = received.getPrivateChannel();
                     channel.sendMessage("Lass mich in ruhe!").queue();
+                }
+            }
+
+            if(received.isFromType(ChannelType.TEXT)){
+                if(!received.getAuthor().isBot()){
+                    System.out.printf("[PM] %s: %s\n", received.getAuthor().getName(), received.getMessage().getContentDisplay());
+                    MessageChannel channel = received.getChannel();
+                    String message = received.getMessage().getContentDisplay();
+                    if(message.startsWith("!")){
+                        String[] command_args = message.split(" ");
+                        command_handler.handle(command_args, received);                        
+                    }
                 }
             }
         }

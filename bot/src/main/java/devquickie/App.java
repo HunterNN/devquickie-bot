@@ -1,7 +1,7 @@
 package devquickie;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import javax.security.auth.login.LoginException;
@@ -19,7 +19,7 @@ import net.dv8tion.jda.core.hooks.EventListener;
 
 public class App implements EventListener
 {
-    private static final String token_path = "bot/assets/token.txt";
+    private static final String token_path = "/assets/token.txt";
 
     private static String token;
     private static CommandHandler command_handler;
@@ -44,12 +44,12 @@ public class App implements EventListener
     }
     
     private static void loadToken(){
-        File file = new File(token_path);
-    
+        InputStream token_file = App.class.getResourceAsStream(token_path);
+        
         try {
-            Scanner sc = new Scanner(file);
+            Scanner sc = new Scanner(token_file);
             token = sc.nextLine();
-        } catch (FileNotFoundException e) {
+        } catch (NoSuchElementException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             System.exit(1);

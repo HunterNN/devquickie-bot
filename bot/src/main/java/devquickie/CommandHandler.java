@@ -21,6 +21,15 @@ public class CommandHandler {
                 channel.sendMessage("Momentan bin ich nur ein einfacher bot der auf !info reagiert.").queue();
             }
         });
+        
+        command_map.put("invalid_command", new CommandInterface(){
+        
+            @Override
+            public void runCommand(String[] command_args, MessageReceivedEvent event) {
+                MessageChannel channel = event.getChannel();
+                channel.sendMessage("Der Command " + command_args[0] + " existiert nicht. Schreibe \"!info\" in den Chat für eine Liste der Commands").queue();
+            }
+        });
     }
 
     public void handle(String[] command_args, MessageReceivedEvent event){
@@ -28,7 +37,7 @@ public class CommandHandler {
         if(command != null){
             command.runCommand(command_args, event);
         } else {
-            command = (CommandInterface) command_map.get("!info");
+            command = (CommandInterface) command_map.get("invalid_command");
             command.runCommand(command_args, event);
         }
         

@@ -68,7 +68,11 @@ public class App implements EventListener
                 if(!received.getAuthor().isBot()){
                     System.out.printf("[PM] %s: %s\n", received.getAuthor().getName(), received.getMessage().getContentDisplay());
                     PrivateChannel channel = received.getPrivateChannel();
-                    channel.sendMessage("Lass mich in ruhe!").queue();
+                    String message = received.getMessage().getContentDisplay();
+                    if(message.startsWith("!")){
+                        String[] command_args = message.split(" ");
+                        command_handler.handle(command_args, received);                        
+                    }
                 }
             }
 

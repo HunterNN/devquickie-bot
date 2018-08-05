@@ -1,6 +1,8 @@
 package devquickie;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -16,7 +18,11 @@ public class CommandHandler {
             @Override
             public void runCommand(String[] command_args, MessageReceivedEvent event) {
                 MessageChannel channel = event.getChannel();
-                channel.sendMessage("Momentan bin ich nur ein einfacher bot der auf !info reagiert.").queue();
+                channel.sendMessage("Folgende Befehle stehen zur Vefügung:").queue();
+                ArrayList<String> commands = new ArrayList<String>(command_map.keySet());
+                for(String command : commands){
+                    System.out.println(command);
+                }
             }
         });
         
@@ -28,6 +34,7 @@ public class CommandHandler {
                 channel.sendMessage("Der Command " + command_args[0] + " existiert nicht. Schreibe \"!info\" in den Chat für eine Liste der Commands").queue();
             }
         });
+
     }
 
     public void handle(String[] command_args, MessageReceivedEvent event){

@@ -3,6 +3,7 @@ package devquickie;
 import java.util.HashMap;
 import java.util.Map;
 
+import devquickie.games.GuessGame;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -46,6 +47,19 @@ public class CommandHandler {
 			}
         });
 
+        command_map.put("!guess_game", new CommandInterface(){
+        
+            @Override
+            public void runCommand(String[] command_args, MessageReceivedEvent event) {
+                CommandInstanceHandle.handleCommand(command_args, event, new GuessGame());
+            }
+        
+            @Override
+            public String getDescription() {
+                return "Errate eine Zahl.";
+            }
+        });
+
     }
 
     public void handle(String[] command_args, MessageReceivedEvent event){
@@ -56,6 +70,5 @@ public class CommandHandler {
             command = (CommandInterface) command_map.get("invalid_command");
             command.runCommand(command_args, event);
         }
-        
     }    
 }

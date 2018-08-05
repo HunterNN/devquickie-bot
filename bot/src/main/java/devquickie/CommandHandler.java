@@ -51,7 +51,7 @@ public class CommandHandler {
         
             @Override
             public void runCommand(String[] command_args, MessageReceivedEvent event) {
-                CommandInstanceHandle.handleCommand(command_args, event, new GuessGame());
+                CommandInstanceHandler.handleCommand(command_args, event, new GuessGame());
             }
         
             @Override

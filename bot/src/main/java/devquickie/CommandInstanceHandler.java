@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-public class CommandInstanceHandle {
+public class CommandInstanceHandler {
     private static HashMap<String, CommandInstance> instances = new HashMap<String, CommandInstance>();
 
     static void handleCommand(String[] command_args, MessageReceivedEvent event, CommandInstance instance){

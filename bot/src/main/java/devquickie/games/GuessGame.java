@@ -21,31 +21,32 @@ public class GuessGame extends CommandInstance{
         MessageChannel channel = event.getChannel();
         if(round == 0){
             this.value = (int)(Math.random() * max_value);
-            channel.sendMessage("Ich habe mir eine Zahl zwischen 0 bis " + max_value + " ausgedacht. \nVersuche die Zahl erraten.").queue();
+            sendMessageWithUserName(event, "Ich habe mir eine Zahl zwischen 0 bis " + max_value + " ausgedacht. \nVersuche die Zahl erraten.");
         } else if(command_args.length > 1){
             try {
                 float guessed_value = Float.parseFloat(command_args[1]);
                 if(guessed_value == value){
-                    channel.sendMessage("Du hast die Zahl " + value + " erraten!").queue();
+                    sendMessageWithUserName(event, "Du hast die Zahl " + value + " erraten!");
                     remove();
                     return;
                 } else if(guessed_value < value) {
-                    channel.sendMessage("Falsch. Die Gesuchte Zahl ist grösser.").queue();
+                    sendMessageWithUserName(event, "Falsch. Die Gesuchte Zahl ist grösser.");
                 } else {
-                    channel.sendMessage("Falsch. Die Gesuchte Zahl ist kleiner.").queue();
+                    sendMessageWithUserName(event, "Falsch. Die Gesuchte Zahl ist kleiner.");
                 }
             } catch (NumberFormatException e) {
-                channel.sendMessage(format_error_message).queue();
+                sendMessageWithUserName(event, format_error_message);
+
                 return;
             }
         } else {
-            channel.sendMessage(format_error_message).queue();
+            sendMessageWithUserName(event, format_error_message);
             return;
         }
         round++;
 
         if(round > tries){
-            channel.sendMessage("Leider hast du alle Versuche aufgebraucht. Die Gesuchte Zahl war: " + value).queue();
+            sendMessageWithUserName(event, "Leider hast du alle Versuche aufgebraucht. Die Gesuchte Zahl war: " + value);
             remove();
         }
 	}

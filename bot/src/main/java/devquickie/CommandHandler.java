@@ -1,6 +1,5 @@
 package devquickie;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +7,7 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class CommandHandler {
-    HashMap command_map;
+    HashMap<String, CommandInterface> command_map;
     
     public CommandHandler(){
         command_map = new HashMap<String, CommandInterface>();
@@ -19,11 +18,18 @@ public class CommandHandler {
             public void runCommand(String[] command_args, MessageReceivedEvent event) {
                 MessageChannel channel = event.getChannel();
                 channel.sendMessage("Folgende Befehle stehen zur Vefügung:").queue();
-                ArrayList<String> commands = new ArrayList<String>(command_map.keySet());
-                for(String command : commands){
-                    System.out.println(command);
-                }
+
+                for(Map.Entry<String, CommandInterface> entry : command_map.entrySet()){
+                    if(entry.getKey().contains("!")){
+                        channel.sendMessage("`" + entry.getKey() + "` \t" + entry.getValue().getDescription()).queue();
+                    }
+                } 
             }
+
+			@Override
+			public String getDescription() {
+				return "Zeigt diese Liste an.";
+			}
         });
         
         command_map.put("invalid_command", new CommandInterface(){
@@ -31,8 +37,13 @@ public class CommandHandler {
             @Override
             public void runCommand(String[] command_args, MessageReceivedEvent event) {
                 MessageChannel channel = event.getChannel();
-                channel.sendMessage("Der Command " + command_args[0] + " existiert nicht. Schreibe \"!info\" in den Chat für eine Liste der Commands").queue();
+                channel.sendMessage("Der Command `" + command_args[0] + "` existiert nicht. Schreibe `!info` in den Chat für eine Liste der Commands").queue();
             }
+
+			@Override
+			public String getDescription() {
+				return null;
+			}
         });
 
     }
